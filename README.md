@@ -56,7 +56,7 @@ Scripts/profiling-opt.sh
 
 ## Accuracy of HwakEye (Table 7, Table 8)
 
-After runningthe following script, `Data/modelname-Delphi1.txt` would contain the profiling results from HawkEye in Table 7 and Table 8.
+After runningthe following script, `Data/modelname-Delphi1.txt` and `Data/modelname-Cheetah1.txt` would contain the profiling results from HawkEye in Table 7 and Table 8.
 
 ```
 chmod +x Scripts/profiling-models-delphi.sh
@@ -65,7 +65,7 @@ chmod +x Scripts/profiling-models-delphi.sh
 
 ## Practical application of HwakEye (Table 9)
 
-After runningthe following script, `Data/modelname-Cheetah1.txt` would contain the profiling results from HawkEye in Table 9.
+After runningthe following script, `resnet18_infra_wan_i.txt` and `resnet50_infra_wan_i.txt` would contain the profiling results from HawkEye in Table 9.
 
 ```
 chmod +x Scripts/profiling-models-cheetah.sh
