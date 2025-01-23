@@ -1,0 +1,8 @@
+Using security parameter 40
+Trying to run 64-bit computation
+Server-side handshake with P2 failed. Make sure both sides  have the necessary certificate (Player-Data/P1.pem in the default configuration on their side and Player-Data/P2.pem on ours), and run `c_rehash <directory>` on its location.
+The certificates should be the same on every host. Also make sure that it's still valid. Certificates generated with `Scripts/setup-ssl.sh` expire after a month.
+See also https://mp-spdz.readthedocs.io/en/latest/troubleshooting.html#handshake-failures
+Signature (should match the other side): 8c460416d38195cf0928c002ba83028f/702a0f7c3e13f7f8634ca59439998b95
+terminate called after throwing an instance of 'boost::wrapexcept<boost::system::system_error>'
+  what():  handshake: tlsv1 alert unknown ca

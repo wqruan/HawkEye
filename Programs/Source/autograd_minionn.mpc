@@ -1,0 +1,57 @@
+import nn as nn
+from tensor import Tensor,autograd_function
+import optimizer as optim
+import dataloader as dataloader
+import functional as F
+program.use_trunc_pr = True
+sfix.set_precision(18, 59)
+cfix.set_precision(18, 59)
+
+
+class MiniONN(nn.Module):
+    def __init__(self,num_class):
+        #inplane=fm
+        self.inplane=16
+        super(MiniONN, self).__init__()
+
+        #
+        self.conv = nn.Sequential(
+            nn.Conv2d(3, 64, kernel_size= 3, stride=1, padding= 1), # in_channels, out_channels, kernel_size
+            nn.Relu(),
+            nn.Conv2d(64, 64, kernel_size= 3, stride=1, padding= 1), # in_channels, out_channels, kernel_size
+            nn.Relu(),
+            nn.AvgPool2d(2),
+            nn.Conv2d(64, 64, kernel_size= 3, stride=1, padding= 1),
+            nn.Relu(),
+            nn.Conv2d(64, 64,kernel_size= 3, stride=1, padding= 1),
+            nn.Relu(),
+            nn.AvgPool2d(2),
+            nn.Conv2d(64, 64, kernel_size= 3, stride=1, padding= 1),
+            nn.Relu(),
+            nn.Conv2d(64, 64, kernel_size= 1, stride=1),
+            nn.Relu(),
+            nn.Conv2d(64, 16,  kernel_size= 1, stride=1),
+            nn.Relu())
+        self.fc = nn.Sequential(
+            nn.Linear(16*64, num_class))
+
+
+
+    def forward(self,x):
+        #stem：conv+bn+maxpool
+        feature = self.conv(x)
+        feature = feature.flatten(1,-1)
+        output = self.fc(feature)
+
+        return output
+
+
+model=MiniONN(10)
+x = Tensor.ones(4, 3, 32, 32)
+labels = Tensor.ones(4, 32)
+crossloss = nn.CrossEntropyLoss()
+dataload = dataloader.DataLoader(x, labels, batch_size = 1, shuffle=False)
+optimizer = optim.SGD(model.parameters(), lr = 0.01)
+input, label = dataload.get_data(0)
+
+output = model(input)

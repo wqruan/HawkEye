@@ -1,0 +1,350 @@
+import nn as nn
+from tensor import Tensor,autograd_function
+import optimizer as optim
+import dataloader as dataloader
+import functional as F
+import math
+import copy
+
+
+src_vocab = {'P': 0, '': 1, '': 2, '': 3,
+             '': 4, '': 5, '': 6, '': 7, '': 8, '': 9, '': 10}
+src_idx2word = {i: w for i, w in enumerate(src_vocab)}
+src_vocab_size = len(src_vocab)
+
+tgt_vocab = {'P': 0, 'I': 1, 'have': 2, 'a': 3, 'good': 4,
+             'friend': 5, 'zero': 6, 'girl': 7,  'boy': 8, 'S': 9, 'E': 10, '.': 11}
+idx2word = {i: w for i, w in enumerate(tgt_vocab)}
+tgt_vocab_size = len(tgt_vocab)
+src_len = 512  # （）enc_input max sequence length
+tgt_len = 512  # dec_input(=dec_output) max sequence length
+batch_size = 1
+# Transformer Parameters
+d_model = 768  # Embedding Size（token embeddingposition）
+# FeedForward dimension ( 512->2048->512，），projection
+d_ff = 3072
+d_k = d_v = 64  # dimension of K(=Q), V（QK，K=V）
+n_layers = 1 # number of Encoder of Decoder Layer（Block）
+n_heads = 12  # number of heads in Multi-Head Attention（）
+program.use_trunc_pr = True
+
+class PositionalEncoding(nn.Module):
+    def __init__(self, d_model, dropout=0.1, max_len=50):
+        super(PositionalEncoding, self).__init__()
+        self.dropout = nn.Dropout(p=dropout)
+
+        pe = Tensor.zeros(max_len, d_model)
+        position = Tensor.arange(0, max_len, value_type = cfix).unsqueeze(1)
+        div_term = (Tensor.arange(
+            0, d_model, 2, value_type = cfix)* (-math.log(10000.0) / d_model)).exp()
+        tmp = (position * div_term.unsqueeze(0).expand([max_len, d_model/2]))
+        pe[:, 0::2] = tmp.sin()
+        pe[:, 1::2] = tmp.cos()
+        pe = pe.unsqueeze(0).transpose(0, 1)
+        self.register_buffer('pe', pe)
+
+    def forward(self, x):
+        """
+        x: [seq_len, batch_size, d_model]
+        """
+        x = x + self.pe[:x.sizes[0], :]
+        return self.dropout(x)
+
+def get_attn_pad_mask(seq_q, seq_k):
+    # pad mask：value，padalpha_ij=0，pad
+    """q,k（q,k），encoder_inputs (x1,x2,..xm)encoder_inputs (x1,x2..xm)
+    encoderdecoder，seq_len
+    seq_q: [batch_size, seq_len]
+    seq_k: [batch_size, seq_len]
+    seq_len could be src_len or it could be tgt_len
+    seq_len in seq_q and seq_len in seq_k maybe not equal
+    """
+    batch_size, len_q = seq_q.sizes[0], seq_q.sizes[1]  # seq_qexpand
+    batch_size, len_k = seq_q.sizes[0], seq_k.sizes[1]
+    # eq(zero) is PAD token
+    # :seq_k = [[1,2,3,4,0], [1,2,3,5,0]]
+    # [batch_size, 1, len_k], True is masked
+    # pad_attn_mask = seq_k.data.eq(0).unsqueeze(1)
+    # [batch_size, len_q, len_k] (batch_size)
+    # return pad_attn_mask.expand(batch_size, len_q, len_k)
+    return Tensor.ones(batch_size, len_q, len_k)
+
+
+def get_attn_subsequence_mask(seq):
+    """（）
+    seq: [batch_size, tgt_len]
+    """
+    attn_shape = [seq.size(0), seq.size(1), seq.size(1)]
+    # attn_shape: [batch_size, tgt_len, tgt_len]
+    subsequence_mask = Tensor.triu(Tensor.ones(attn_shape), k=1)  # 
+    return subsequence_mask  # [batch_size, tgt_len, tgt_len]
+
+class ScaledDotProductAttention(nn.Module):
+    def __init__(self):
+        super(ScaledDotProductAttention, self).__init__()
+        self.softmax = nn.Softmax(dim=-1)
+    def forward(self, Q, K, V, attn_mask):
+        """
+        Q: [batch_size, n_heads, len_q, d_k]
+        K: [batch_size, n_heads, len_k, d_k]
+        V: [batch_size, n_heads, len_v(=len_k), d_v]
+        attn_mask: [batch_size, n_heads, seq_len, seq_len]
+        ：encoder-decoderAttentionlen_q(q1,..qt)len_k(k1,...km)
+        """
+        scores = Q.bmm(K.transpose(-1, -2)) / \
+            math.sqrt(d_k)  # scores : [batch_size, n_heads, len_q, len_k]
+        # maskscores（-1e9scoresattn_mask1）
+        # Fills elements of self tensor with value where mask is True.
+        scores.masked_fill_(attn_mask, -1e3)
+        print(scores.sizes)
+        attn = self.softmax(scores)  # (v)softmax
+        # scores : [batch_size, n_heads, len_q, len_k] * V: [batch_size, n_heads, len_v(=len_k), d_v]
+        # context: [batch_size, n_heads, len_q, d_v]
+        context = attn.bmm(V)
+        # context：[[z1,z2,...],[...]], attn（）
+        return context, attn
+    
+class MultiHeadAttention(nn.Module):
+    """Attention:
+    EncoderSelf-Attention
+    DecoderMasked Self-Attention
+    Encoder-DecoderAttention
+    ：seq_len x d_model
+    ：seq_len x d_model
+    """
+
+    def __init__(self):
+        super(MultiHeadAttention, self).__init__()
+        self.W_Q = nn.Linear(d_model, d_k * n_heads,
+                             bias=False)  # q,k，
+        self.W_K = nn.Linear(d_model, d_k * n_heads, bias=False)
+        self.W_V = nn.Linear(d_model, d_v * n_heads, bias=False)
+        # attentionseq_len x d_model
+        self.fc = nn.Linear(n_heads * d_v, d_model, bias=False)
+        self.layernorm = nn.LayerNorm(d_model)
+        self.scale = ScaledDotProductAttention()
+    def forward(self, input_Q, input_K, input_V, attn_mask):
+        """
+        input_Q: [batch_size, len_q, d_model]
+        input_K: [batch_size, len_k, d_model]
+        input_V: [batch_size, len_v(=len_k), d_model]
+        attn_mask: [batch_size, seq_len, seq_len]
+        """
+        residual, batch_size = input_Q, input_Q.size(0)
+        # ，，
+        # B: batch_size, S:seq_len, D: dim
+        # (B, S, D) -proj-> (B, S, D_new) -split-> (B, S, Head, W) -trans-> (B, Head, S, W)
+        #                          
+
+        # Q: [batch_size, n_heads, len_q, d_k]
+        Q = self.W_Q(input_Q).view(batch_size, -1,
+                                   n_heads, d_k).transpose(1, 2)
+        # K: [batch_size, n_heads, len_k, d_k] # KV，
+        K = self.W_K(input_K).view(batch_size, -1,
+                                   n_heads, d_k).transpose(1, 2)
+        # V: [batch_size, n_heads, len_v(=len_k), d_v]
+        V = self.W_V(input_V).view(batch_size, -1,
+                                   n_heads, d_v).transpose(1, 2)
+        print_ln("finish QKV")
+        # ，mask4
+        # attn_mask: [batch_size, seq_len, seq_len] -> [batch_size, n_heads, seq_len, seq_len]
+        attn_mask = attn_mask.unsqueeze(1).repeat(1, n_heads, 1, 1)
+
+        # context: [batch_size, n_heads, len_q, d_v], attn: [batch_size, n_heads, len_q, len_k]
+        context, attn = self.scale(Q, K, V, attn_mask)
+        print_ln("finish scale")
+        # 
+        # context: [batch_size, n_heads, len_q, d_v] -> [batch_size, len_q, n_heads * d_v]
+        context = context.transpose(1, 2).reshape(
+            batch_size, -1, n_heads * d_v)
+
+        # attentionseq_len x d_model
+        output = self.fc(context)  # [batch_size, len_q, d_model]
+        return self.layernorm(output + residual), attn
+    
+class PoswiseFeedForwardNet(nn.Module):
+    def __init__(self):
+        super(PoswiseFeedForwardNet, self).__init__()
+        self.fc = nn.Sequential(
+            nn.Linear(d_model, d_ff, bias=False),
+            nn.GELU(),
+            nn.Linear(d_ff, d_model, bias=False)
+        )
+        self.layernorm = nn.LayerNorm(d_model)
+    def forward(self, inputs):
+        """
+        inputs: [batch_size, seq_len, d_model]
+        """
+        print_ln("start postion forward")
+        residual = inputs
+        print(inputs.sizes)
+        
+        output = self.fc(inputs)
+        # [batch_size, seq_len, d_model]
+        output = self.layernorm(output + residual)
+        print_ln("finish postion forward")
+        return output
+    
+class EncoderLayer(nn.Module):
+    def __init__(self):
+        super(EncoderLayer, self).__init__()
+        self.enc_self_attn = MultiHeadAttention()
+        self.pos_ffn = PoswiseFeedForwardNet()
+
+    
+    def forward(self, enc_inputs, enc_self_attn_mask):
+        """E
+        enc_inputs: [batch_size, src_len, d_model]
+        enc_self_attn_mask: [batch_size, src_len, src_len]  mask(pad mask or sequence mask)
+        """
+        # enc_outputs: [batch_size, src_len, d_model], attn: [batch_size, n_heads, src_len, src_len]
+        # enc_inputs * W_Q = Q
+        # enc_inputs * W_K = K
+        # enc_inputs * W_V = V
+        enc_outputs, attn = self.enc_self_attn(enc_inputs, enc_inputs, enc_inputs,
+                                               enc_self_attn_mask)  # enc_inputs to same Q,K,V（）
+        print_ln("finish encode attention")
+        enc_outputs = self.pos_ffn(enc_outputs)
+        # enc_outputs: [batch_size, src_len, d_model]
+        return enc_outputs, attn
+    
+class DecoderLayer(nn.Module):
+    def __init__(self):
+        super(DecoderLayer, self).__init__()
+        self.dec_self_attn = MultiHeadAttention()
+        self.dec_enc_attn = MultiHeadAttention()
+        self.pos_ffn = PoswiseFeedForwardNet()
+
+    def forward(self, dec_inputs, enc_outputs, dec_self_attn_mask, dec_enc_attn_mask):
+        """
+        dec_inputs: [batch_size, tgt_len, d_model]
+        enc_outputs: [batch_size, src_len, d_model]
+        dec_self_attn_mask: [batch_size, tgt_len, tgt_len]
+        dec_enc_attn_mask: [batch_size, tgt_len, src_len]
+        """
+        # dec_outputs: [batch_size, tgt_len, d_model], dec_self_attn: [batch_size, n_heads, tgt_len, tgt_len]
+        dec_outputs, dec_self_attn = self.dec_self_attn(dec_inputs, dec_inputs, dec_inputs,
+                                                        dec_self_attn_mask)  # Q,K,VDecoder
+        # dec_outputs: [batch_size, tgt_len, d_model], dec_enc_attn: [batch_size, h_heads, tgt_len, src_len]
+        dec_outputs, dec_enc_attn = self.dec_enc_attn(dec_outputs, enc_outputs, enc_outputs,
+                                                      dec_enc_attn_mask)  # AttentionQ(decoder)  K,V(encoder)
+        # [batch_size, tgt_len, d_model]
+        dec_outputs = self.pos_ffn(dec_outputs)
+        # dec_self_attn, dec_enc_attn
+        return dec_outputs, dec_self_attn, dec_enc_attn
+    
+class Encoder(nn.Module):
+    def __init__(self):
+        super(Encoder, self).__init__()
+        # self.src_emb = nn.Embedding(src_vocab_size, d_model)  # token Embedding
+        # self.pos_emb = PositionalEncoding(d_model)  # Transformer，
+        self.layers = nn.ModuleList([EncoderLayer() for _ in range(n_layers)])
+        
+    @buildingblock("encoder")
+    def forward(self, enc_inputs):
+        """
+        enc_inputs: [batch_size, src_len]
+        """
+        enc_outputs = enc_inputs
+        # self.src_emb(enc_inputs)  # [batch_size, src_len, d_model]
+        # enc_outputs = self.pos_emb(enc_outputs.transpose(0, 1)).transpose(0, 1)  # [batch_size, src_len, d_model]
+        # Encoderpad mask
+        enc_self_attn_mask = get_attn_pad_mask(
+            enc_inputs, enc_inputs)  # [batch_size, src_len, src_len]
+        enc_self_attns = []  # ，attention（，
+        for layer in self.layers:  # fornn.ModuleList
+            # blockenc_outputsblock
+            # enc_outputs: [batch_size, src_len, d_model], enc_self_attn: [batch_size, n_heads, src_len, src_len]
+            enc_outputs, enc_self_attn = layer(enc_outputs,
+                                               enc_self_attn_mask)  # enc_outputsinput，maskself attention
+            enc_self_attns.append(enc_self_attn)  # 
+        return enc_outputs, enc_self_attns
+
+class Decoder(nn.Module):
+    def __init__(self):
+        super(Decoder, self).__init__()
+        # self.tgt_emb = nn.Embedding(
+        #     tgt_vocab_size, d_model)  # Decoderembed
+        # self.pos_emb = PositionalEncoding(d_model)
+        self.layers = nn.ModuleList([DecoderLayer()
+                                    for _ in range(n_layers)])  # Decoderblocks
+
+    def forward(self, dec_inputs, enc_inputs, enc_outputs):
+        """
+        dec_inputs: [batch_size, tgt_len]
+        enc_inputs: [batch_size, src_len]
+        enc_outputs: [batch_size, src_len, d_model]   # Encoder-Decoder Attention
+        """
+        dec_outputs = dec_inputs
+        # self.tgt_emb(dec_inputs)  # [batch_size, tgt_len, d_model]
+        # dec_outputs = self.pos_emb(dec_outputs.transpose(0, 1)).transpose(0, 1)  # [batch_size, tgt_len, d_model]
+        # Decoderpad mask（decoderpad，pad）
+        dec_self_attn_pad_mask = get_attn_pad_mask(dec_inputs, dec_inputs)  # [batch_size, tgt_len, tgt_len]
+        # Masked Self_Attention：
+        dec_self_attn_subsequence_mask = get_attn_subsequence_mask(dec_inputs) # [batch_size, tgt_len, tgt_len]
+        
+        # Decodermask（pad，）
+        dec_self_attn_mask = Tensor.gt((dec_self_attn_pad_mask + dec_self_attn_subsequence_mask),
+                                      0)  # [batch_size, tgt_len, tgt_len]; torch.gt，1，0
+        print_ln("finish decode gt")
+
+        # maskencoder-decoder attention
+        # get_attn_pad_maskenc_inputspad mask(encK,V，Attentionv1,v2,..vm，padv_i0，pad)
+        #                       dec_inputsexpandsize
+        dec_enc_attn_mask = get_attn_pad_mask(
+            dec_inputs, enc_inputs)  # [batc_size, tgt_len, src_len]
+
+        dec_self_attns, dec_enc_attns = [], []
+        for layer in self.layers:
+            # dec_outputs: [batch_size, tgt_len, d_model], dec_self_attn: [batch_size, n_heads, tgt_len, tgt_len], dec_enc_attn: [batch_size, h_heads, tgt_len, src_len]
+            # DecoderBlockBlockdec_outputs（）Encoderenc_outputs（）
+            dec_outputs, dec_self_attn, dec_enc_attn = layer(dec_outputs, enc_outputs, dec_self_attn_mask,
+                                                             dec_enc_attn_mask)
+            print_ln("finish decode attention")
+            dec_self_attns.append(dec_self_attn)
+            dec_enc_attns.append(dec_enc_attn)
+        # dec_outputs: [batch_size, tgt_len, d_model]
+
+        return dec_outputs, dec_self_attns, dec_enc_attns
+    
+class Transformer(nn.Module):
+    def __init__(self):
+        super(Transformer, self).__init__()
+        self.encoder = Encoder()
+        # self.decoder = Decoder()
+        # self.projection = nn.Linear(
+        #     d_model, tgt_vocab_size, bias=False)
+
+    def forward(self, enc_inputs, dec_inputs):
+        """Transformers：
+        enc_inputs: [batch_size, src_len]
+        dec_inputs: [batch_size, tgt_len]
+        """
+        # tensor to store decoder outputs
+        # outputs = torch.zeros(batch_size, tgt_len, tgt_vocab_size).to(self.device)
+
+        # enc_outputs: [batch_size, src_len, d_model], enc_self_attns: [n_layers, batch_size, n_heads, src_len, src_len]
+        # Encoder，[batch_size, src_len, d_model]
+        enc_outputs, enc_self_attns = self.encoder(enc_inputs)
+        print_ln("finish encode")
+        # dec_outputs: [batch_size, tgt_len, d_model], dec_self_attns: [n_layers, batch_size, n_heads, tgt_len, tgt_len], dec_enc_attn: [n_layers, batch_size, tgt_len, src_len]
+        # dec_outputs, dec_self_attns, dec_enc_attns = self.decoder(
+        #     dec_inputs, enc_inputs, enc_outputs)
+        # print_ln("finish decode")
+        # # dec_outputs: [batch_size, tgt_len, d_model] -> dec_logits: [batch_size, tgt_len, tgt_vocab_size]
+        # dec_logits = self.projection(dec_outputs)
+        # print_ln("finish prepare")
+        # return dec_logits.view(-1, dec_logits.size(-1)), enc_self_attns, dec_self_attns, dec_enc_attns
+        return enc_outputs, enc_self_attns
+
+model = Transformer()
+#  ignore_index=0， "pad"  0，， "pad" （ "pad" ，）
+criterion = nn.CrossEntropyLoss(ignore_index=0)
+optimizer = optim.SGD(model.parameters(), lr=1e-3,
+                      momentum=0.99)  # adam
+x = Tensor.ones(4, src_len, d_model)
+y = Tensor.ones(4, tgt_len, d_model)
+dataload = dataloader.DataLoader(x, y, batch_size = 1, shuffle=False)
+input, label = dataload.get_data(0)
+model(input, label)
+# output1.print_reveal_nested()
