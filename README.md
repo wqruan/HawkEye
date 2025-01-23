@@ -1,5 +1,12 @@
 # Hawkeye
 
+This README file provides instructions for reproducing the experimental results in the paper "HawkEye: Statically and Accurately Profiling the Communication Cost of Models in Multi-party Learning" (Usenix Security 2025).
+
+We thank all anonymous reviewers for their insightful comments, which have significantly contributed to the improvement of this artifact.
+
+System Requirements: Unless specified differently, the evaluations in this README file can be conducted on a machine with 4 cores and 64 GB of RAM.
+
+
 ## Build the envirenment
 ```
 virtualenv venv --python 3.8
