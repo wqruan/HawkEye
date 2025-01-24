@@ -88,4 +88,6 @@ Scripts/setup-online.sh 3 64
 chmod +x Scripts/resnet-opt.sh
 chmod +x Scripts/ring.sh
 Scripts/resnet-opt.sh
+python Scripts/resnet_view.py
 ```
+The command "Scripts/resnet-opt.sh" may take more than one day. You can run 'nohup Scripts/resnet-opt.sh &' rather than 'Scripts/resnet-opt.sh' to run the experiment in.the background.
