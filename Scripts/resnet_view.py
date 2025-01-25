@@ -1,4 +1,5 @@
 import re
+import numpy as np
 
 frameworks = ['original', 'taso', 'hawkeye']
 
@@ -28,7 +29,7 @@ def loaddata(path):
     for i in range(0, 3):
         comm_list.append(float(mb_matches[i*mb_size+4]))
         round_list.append(int(round_matches[i*round_size+3]))
-        comm_time_list.append(sum([float(round_matches[i*seconds_size+j]) for j in range(3)]))
+        comm_time_list.append(sum([float(seconds_matches[i*seconds_size+j]) for j in range(3)]))
         cpu_time_list.append(float(seconds_matches[i*seconds_size+3]))
         
     return comm_list, round_list, comm_time_list, cpu_time_list
@@ -36,16 +37,30 @@ def loaddata(path):
 models = ['resnet18_infra_wan_', 'resnet50_infra_wan_']
 
 for model in models:
+    comm_table = []
+    round_table = []
+    comm_time_table = []
+    cpu_time_table = []
     for i in range(1, 5):
         model_path = model + str(i)
-        print(model_path)
+        # print(model_path)
         try:
             comm_list, round_list, comm_time_list, cpu_time_list = loaddata(model_path)
-            print('comm:', comm_list)
-            print('round:', round_list)
-            print('comm_time:', comm_time_list)
-            print('cpu_time:', cpu_time_list)
-            print()
+            comm_table.append(comm_list)
+            round_table.append(round_list)
+            comm_time_table.append(comm_time_list)
+            cpu_time_table.append(cpu_time_list)
         except:
             pass
+    comm_table = np.array(comm_table)
+    round_table = np.array(round_table)
+    comm_time_table = np.array(comm_time_table)
+    cpu_time_table = np.array(cpu_time_table)
+    
+    for i in range(3):
+        print(model + frameworks[i])
+        print('comm: {} MB'.format(np.mean(comm_table[:,i])))
+        print('round:', np.mean(round_table[:,i]))
+        print('comm_time: {} ({}) seconds'.format(np.mean(comm_time_table[:,i]), np.var(comm_time_table[:,i])))
+        print()
 
