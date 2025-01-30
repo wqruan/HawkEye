@@ -16,7 +16,7 @@ mkdir Data
 ```
 
 
-## Accuracy of HwakEye (Table 2, Table 3)
+## Accuracy of HawkEye (Table 2, Table 3)
 
 After runningthe following script, `Data/modelname-i.txt` would contain the profiling results from HawkEye in Table 2 and Table 3.
 
@@ -54,7 +54,7 @@ chmod +x Scripts/profiling-opt.sh
 Scripts/profiling-opt.sh
 ```
 
-## Accuracy of HwakEye (Table 7, Table 8)
+## Accuracy of HawkEye (Table 7, Table 8)
 
 After runningthe following script, `Data/modelname-Delphi1.txt` and `Data/modelname-Cheetah1.txt` would contain the profiling results from HawkEye in Table 7 and Table 8.
 
@@ -63,7 +63,7 @@ chmod +x Scripts/profiling-models-delphi.sh
 ./Scripts/profiling-models-delphi.sh
 ```
 
-## Practical application of HwakEye (Table 9)
+## Practical application of HawkEye (Table 9)
 
 After runningthe following script, `resnet18_infra_wan_i.txt` and `resnet50_infra_wan_i.txt` would contain the profiling results from HawkEye in Table 9.
 
