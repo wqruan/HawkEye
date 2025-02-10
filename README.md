@@ -24,7 +24,7 @@ mkdir Data
 
 
 ## Accuracy of HawkEye 
-(Table 1, Table 2, Table 6, Table 7, Table 8, Table 9, Figure 6, and Figule 7)
+(Table 1, Table 2, Table 6, Table 7, Table 8, Table 9, Figure 6, and Figure 7)
 
 After runningthe following script, `Data/modelname-i.txt` would contain the profiling results from HawkEye in Table 1, Table 2, Figure 6, and Figule 7.
 
