@@ -89,7 +89,7 @@ Scripts/profiling-opt.sh
 The above commands might take about half of an hour.
 
 
-## Practical application of HawkEye
+## Computational graph optimization
 (Table 5)
 
 After runningthe following script, you can run 'python Scripts/resnet_view.py' to parse the running results. After running 'python Scripts/resnet_view.py', terminal would show the experimental results in Table 5.
