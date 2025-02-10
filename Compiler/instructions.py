@@ -2775,10 +2775,7 @@ class matmulsm(matmul_base, base.VarArgsInstruction, base.Mergeable):
         online_round = 0
         offline_round = 0
         for i in range(0, len(self.args), 12):
-            print(2314235)
-            print(self.args)
             res = cost_func(config.bit_length, config._security, config.computation_security, config.f, config.n_parties, self.args[i+3], self.args[i+4], self.args[i+5], program.degree, program.modulus)       
-            print(res)
             req_node.increment(('online communication', 'bits'), res[0])
             req_node.increment(('offline communication', 'bits'), res[2])
             online_round = max(online_round, res[1])
