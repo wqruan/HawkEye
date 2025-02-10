@@ -7,7 +7,14 @@ We thank all anonymous reviewers for their insightful comments, which have signi
 System Requirements: Unless specified differently, the evaluations in this README file can be conducted on a machine with 4 cores and 64 GB of RAM.
 
 
-## Build the envirenment
+## Package structure
+This repository has the following components:  
+- **Compiler**: The main implementation of HawkEye's static communication cost profiling method and autograd library.
+- **Programs**: The model files (Programs/Source) and compiled bytecodes.
+- **Scripts**: The scripts used to reproduce the experimental results in the paper.
+- **Other folders**: The external components from [MP-SPDZ](https://github.com/data61/MP-SPDZ), which are necessary to reproduce the experimental results in Table 5. More information about these folders can be found in the [official documentation of MP-SPDZ](https://mp-spdz.readthedocs.io/en/latest/).
+
+## Build the environment
 ```
 virtualenv venv --python 3.8
 source ../venv/bin/activate
@@ -16,16 +23,17 @@ mkdir Data
 ```
 
 
-## Accuracy of HawkEye (Table 2, Table 3)
+## Accuracy of HawkEye (Table 1, Table 2, Figure 6, and Figule 7)
 
-After runningthe following script, `Data/modelname-i.txt` would contain the profiling results from HawkEye in Table 2 and Table 3.
+After runningthe following script, `Data/modelname-i.txt` would contain the profiling results from HawkEye in Table 1, Table 2, Figure 6, and Figule 7.
 
 ```
 chmod +x Scripts/profiling-models.sh
 ./Scripts/profiling-models.sh
 ```
+The above commands might take about one hour. The profiling results from CrypTFlow2 and CrypTen can be obtained by the following steps: (1) Downloading the codes stored in https://github.com/wqruan/EzPC-HawkEye/tree/main and https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
 
-## Efficiency of HawkEye (Table 4)
+## Efficiency of HawkEye (Table 3)
 
 After running the following script, the time of total profiling and block tree analysis for five secure model inference processes would be shown in the terminal
 
@@ -34,7 +42,7 @@ chmod +x Scripts/profiling-models.sh
 Scripts/profiling-models.sh
 python Scripts/profiling-models.py
 ```
-
+The above commands might take about one hour.  The running time of CrypTFlow2 and CrypTen can be obtained by the following steps: (1) Downloading the codes stored in https://github.com/wqruan/EzPC-HawkEye/tree/main and https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
 
 
 ## Performance of security model (Figure 5)
@@ -45,32 +53,21 @@ chmod +x Scripts/profiling-sec-model.sh
 Scripts/profiling-sec-model.sh
 python Scripts/profiling-sec-model.py
 ```
+The above commands might take about one hour.
 
-## Choice of optimizers (Table 5)
+
+## Choice of optimizers (Table 4)
 
 After running the following script, `Data/modelname_train_sgd.txt` would contain the communication cost profiling results of secure model training process with SGD, `Data/modelname_train_adam.txt` would contain the communication cost profiling results of secure model training process with Adam.
 ```
 chmod +x Scripts/profiling-opt.sh
 Scripts/profiling-opt.sh
 ```
+The above commands might take about half of an hour.
 
-## Accuracy of HawkEye (Table 7, Table 8)
 
-After runningthe following script, `Data/modelname-Delphi1.txt` and `Data/modelname-Cheetah1.txt` would contain the profiling results from HawkEye in Table 7 and Table 8.
-
-```
-chmod +x Scripts/profiling-models-delphi.sh
-./Scripts/profiling-models-delphi.sh
-```
-
-## Practical application of HawkEye (Table 9)
-
-After runningthe following script, `resnet18_infra_wan_i.txt` and `resnet50_infra_wan_i.txt` would contain the profiling results from HawkEye in Table 9.
-
-```
-chmod +x Scripts/profiling-models-cheetah.sh
-./Scripts/profiling-models-cheetah.sh
-```
+## Practical application of HawkEye (Table 5)
+After runningthe following script, you can run 'python Scripts/resnet_view.py' to parse the running results. After running 'python Scripts/resnet_view.py', terminal would show the experimental results in Table 5.
 
 ## 
 ```
@@ -88,6 +85,28 @@ Scripts/setup-online.sh 3 64
 chmod +x Scripts/resnet-opt.sh
 chmod +x Scripts/ring.sh
 Scripts/resnet-opt.sh
-python Scripts/resnet_view.py
 ```
 The command "Scripts/resnet-opt.sh" may take more than one day. You can run 'nohup Scripts/resnet-opt.sh &' rather than 'Scripts/resnet-opt.sh' to run the experiment in.the background.
+
+
+## Accuracy of HawkEye (Table 6, Table 7, Table 8)
+
+After runningthe following script, `Data/modelname-Delphi1.txt` and `Data/modelname-Cheetah1.txt` would contain the profiling results from HawkEye in Table 6, Table 7 and Table 8.
+
+```
+chmod +x Scripts/profiling-models-delphi.sh
+./Scripts/profiling-models-delphi.sh
+chmod +x Scripts/profiling-models-cheetah.sh
+./Scripts/profiling-models-cheetah.sh
+```
+It takes about five minutes. Note that we manually construct many models with a single layer to obtain the profiling results from Cheetah. The reproduction of the process would require a large amount of time. Therefore, we omit it in the documentation
+
+## Accuracy of HawkEye (Table 9)
+
+After runningthe following script, `Data/modelname-SEMI2K1.txt`  would contain the profiling results from HawkEye in Table 9.
+
+```
+chmod +x Scripts/profiling-models-semi2k.sh
+./Scripts/profiling-models-semi2k.sh
+```
+It takes about ten minutes. Note that we manually construct many models with a single layer to obtain the profiling results from SecretFlow-SEMI2K. The reproduction of the process would require a large amount of time. Therefore, we omit it in the documentation

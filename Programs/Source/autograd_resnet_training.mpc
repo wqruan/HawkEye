@@ -153,7 +153,7 @@ x = Tensor.ones(128, 3, 32, 32)
 labels = Tensor.ones(128, 10)
 crossloss = nn.CrossEntropyLoss()
 dataload = dataloader.DataLoader(x, labels, batch_size = 128, shuffle=False)
-optimizer = optim.SGD(model.parameters(), lr = 0.01, momentum=0.9, weight_decay = 0.01)
+optimizer = optim.SGD(model.parameters(), lr = 0.01)
 model.train()
 input, label = dataload.get_data(0)
 
