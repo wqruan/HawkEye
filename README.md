@@ -26,18 +26,18 @@ mkdir Data
 ## Accuracy of HawkEye 
 (Table 1, Table 2, Table 6, Table 7, Table 8, Table 9, Figure 6, and Figure 7)
 
-### Table 1, Table 2, Figure 6, and Figule 7
-After runningthe following script, `Data/modelname-i.txt` would contain the profiling results from HawkEye in Table 1, Table 2, Figure 6, and Figule 7.
+### Table 1, Table 2, Figure 6, and Figure 7
+After running the following script, `Data/modelname-i.txt` would contain the profiling results from HawkEye in Table 1, Table 2, Figure 6, and Figure 7.
 
 ```
 chmod +x Scripts/profiling-models.sh
 ./Scripts/profiling-models.sh
 ```
-The above commands might take about one hour. The profiling results CrypTen can be obtained by the following steps: (1) Downloading the codes stored in  https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
+The above commands might take about one hour. The profiling results from CrypTen can be obtained by the following steps: (1) Downloading the codes stored in  https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
 
 
 ### Table 6, Table 7 and Table 8
-After runningthe following script, `Data/modelname-Delphi1.txt` and `Data/modelname-Cheetah1.txt` would contain the profiling results from HawkEye in Table 6, Table 7 and Table 8.
+After running the following script, `Data/modelname-Delphi1.txt` and `Data/modelname-Cheetah1.txt` would contain the profiling results from HawkEye in Table 6, Table 7, and Table 8.
 
 ```
 chmod +x Scripts/profiling-models-delphi.sh
@@ -45,28 +45,28 @@ chmod +x Scripts/profiling-models-delphi.sh
 chmod +x Scripts/profiling-models-cheetah.sh
 ./Scripts/profiling-models-cheetah.sh
 ```
-It takes about five minutes. Note that we manually construct many models with a single layer to obtain the profiling results from Cheetah. The reproduction of the process would require a large amount of time. Therefore, we omit it in this documentation
+It takes about five minutes. Note that we manually construct many models with a single layer to obtain the profiling results from Cheetah. The reproduction of the process would require a large amount of time. Therefore, we omit it in this documentation.
 
 ### Table 9
-After runningthe following script, `Data/modelname-SEMI2K1.txt`  would contain the profiling results from HawkEye in Table 9.
+After running the following script, `Data/modelname-SEMI2K1.txt` will contain the profiling results from HawkEye in Table 9.
 
 ```
 chmod +x Scripts/profiling-models-semi2k.sh
 ./Scripts/profiling-models-semi2k.sh
 ```
-It takes about ten minutes. Note that we manually construct many models with a single layer to obtain the profiling results from SecretFlow-SEMI2K. The reproduction of the process would require a large amount of time. Therefore, we omit it in this documentation
+It takes about ten minutes. Note that we manually construct many models with a single layer to obtain the profiling results from SecretFlow-SEMI2K. The reproduction of the process would require a large amount of time. Therefore, we omit it in this documentation.
 
 ## Efficiency of HawkEye 
 (Table 3)
 
-After running the following script, the time of total profiling and block tree analysis for five secure model inference processes would be shown in the terminal
+After running the following script, the time of total profiling and block tree analysis for five secure model inference processes will be shown in the terminal.
 
 ```
 chmod +x Scripts/profiling-models.sh
 Scripts/profiling-models.sh
 python Scripts/profiling-models.py
 ```
-The above commands might take about one hour.  The running time of CrypTen can be obtained by the following steps: (1) Downloading the codes stored in https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
+The above commands might take about one hour.  The following steps can obtain the running time of CrypTen: (1) Downloading the codes stored in https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
 
 
 ## Impact of security models
@@ -84,12 +84,12 @@ The above commands might take about one hour.
 ## Choice of optimizers 
 (Table 4)
 
-After running the following script, `Data/modelname_train_sgd.txt` would contain the communication cost profiling results of secure model training process with SGD, `Data/modelname_train_adam.txt` would contain the communication cost profiling results of secure model training process with Adam.
+After running the following script, `Data/modelname_train_sgd.txt` would contain the communication cost profiling results of the secure model training process with SGD, `Data/modelname_train_adam.txt` would contain the communication cost profiling results of the secure model training process with Adam.
 ```
 chmod +x Scripts/profiling-opt.sh
 Scripts/profiling-opt.sh
 ```
-The above commands might take about half of an hour.
+The above commands might take about half an hour.
 
 
 ## Computational graph optimization
@@ -110,13 +110,13 @@ Scripts/setup-online.sh 3 64
 ```
 
 ### Run experiments
-After runningthe following script, you can run '' to parse the running results. After running 'python Scripts/resnet_view.py', terminal would show the experimental results in Table 5.
+After running the following script, you can run '' to parse the running results. After running 'python Scripts/resnet_view.py,' the terminal would show the experimental results in Table 5.
 ```
 chmod +x Scripts/resnet-opt.sh
 chmod +x Scripts/ring.sh
 Scripts/resnet-opt.sh
 ```
-The command "Scripts/resnet-opt.sh" may take more than one day. You can run 'nohup Scripts/resnet-opt.sh &' rather than 'Scripts/resnet-opt.sh' to run the experiment in.the background.
+The command "Scripts/resnet-opt.sh" may take more than one day. You can run 'nohup Scripts/resnet-opt.sh &' rather than 'Scripts/resnet-opt.sh' to run the experiment in the background.
 
 ### retrieve results
 
