@@ -45,7 +45,7 @@ chmod +x Scripts/profiling-models-delphi.sh
 chmod +x Scripts/profiling-models-cheetah.sh
 ./Scripts/profiling-models-cheetah.sh
 ```
-It takes about five minutes. Note that we manually construct many models with a single layer to obtain the profiling results from Cheetah. The reproduction of the process would require a large amount of time. Therefore, we omit it in this documentation.
+It takes about five minutes. The profiling results from Delphi can be obtained by the following steps: (1) Downloading the codes stored in https://github.com/yNotAVAILABLEa/Delphi-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
 
 ### Table 9
 After running the following script, `Data/modelname-SEMI2K1.txt` will contain the profiling results from HawkEye in Table 9.
