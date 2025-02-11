@@ -66,7 +66,7 @@ python Scripts/profiling-models.py
 The above commands might take about one hour.  The running time of CrypTen can be obtained by the following steps: (1) Downloading the codes stored in https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
 
 
-## Performance of security model 
+## Impact of security models
 (Figure 5)
 
 After running the following script, the `./protol_profiling.png` will show the model communication profiling results on MPL frameworks with different security models
@@ -89,7 +89,7 @@ Scripts/profiling-opt.sh
 The above commands might take about half of an hour.
 
 
-## Practical application of HawkEye
+## Computational graph optimization
 (Table 5)
 
 After runningthe following script, you can run 'python Scripts/resnet_view.py' to parse the running results. After running 'python Scripts/resnet_view.py', terminal would show the experimental results in Table 5.
