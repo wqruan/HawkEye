@@ -26,6 +26,7 @@ mkdir Data
 ## Accuracy of HawkEye 
 (Table 1, Table 2, Table 6, Table 7, Table 8, Table 9, Figure 6, and Figure 7)
 
+### Table 1, Table 2, Figure 6, and Figule 7
 After runningthe following script, `Data/modelname-i.txt` would contain the profiling results from HawkEye in Table 1, Table 2, Figure 6, and Figule 7.
 
 ```
@@ -34,6 +35,8 @@ chmod +x Scripts/profiling-models.sh
 ```
 The above commands might take about one hour. The profiling results CrypTen can be obtained by the following steps: (1) Downloading the codes stored in  https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
 
+
+### Table 6, Table 7 and Table 8
 After runningthe following script, `Data/modelname-Delphi1.txt` and `Data/modelname-Cheetah1.txt` would contain the profiling results from HawkEye in Table 6, Table 7 and Table 8.
 
 ```
@@ -44,7 +47,7 @@ chmod +x Scripts/profiling-models-cheetah.sh
 ```
 It takes about five minutes. Note that we manually construct many models with a single layer to obtain the profiling results from Cheetah. The reproduction of the process would require a large amount of time. Therefore, we omit it in this documentation
 
-
+### Table 9
 After runningthe following script, `Data/modelname-SEMI2K1.txt`  would contain the profiling results from HawkEye in Table 9.
 
 ```
@@ -67,7 +70,7 @@ The above commands might take about one hour.  The running time of CrypTen can b
 
 
 ## Impact of security models
-(Figure 5)
+(Figure 8)
 
 After running the following script, the `./protol_profiling.png` will show the model communication profiling results on MPL frameworks with different security models
 ```
@@ -92,9 +95,9 @@ The above commands might take about half of an hour.
 ## Computational graph optimization
 (Table 5)
 
-After runningthe following script, you can run 'python Scripts/resnet_view.py' to parse the running results. After running 'python Scripts/resnet_view.py', terminal would show the experimental results in Table 5.
 
-## 
+
+### Prepare environment
 ```
 sudo apt-get install automake build-essential cmake git libboost-dev libboost-thread-dev libntl-dev libsodium-dev libssl-dev libtool m4  texinfo yasm
 make -j 8 tldr
@@ -106,6 +109,8 @@ Scripts/setup-ssl.sh 3
 Scripts/setup-online.sh 3 64
 ```
 
+### Run experiments
+After runningthe following script, you can run '' to parse the running results. After running 'python Scripts/resnet_view.py', terminal would show the experimental results in Table 5.
 ```
 chmod +x Scripts/resnet-opt.sh
 chmod +x Scripts/ring.sh
@@ -113,6 +118,8 @@ Scripts/resnet-opt.sh
 ```
 The command "Scripts/resnet-opt.sh" may take more than one day. You can run 'nohup Scripts/resnet-opt.sh &' rather than 'Scripts/resnet-opt.sh' to run the experiment in.the background.
 
+### retrieve results
 
-
-
+```
+python Scripts/resnet_view.py
+```
