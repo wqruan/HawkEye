@@ -32,7 +32,7 @@ After runningthe following script, `Data/modelname-i.txt` would contain the prof
 chmod +x Scripts/profiling-models.sh
 ./Scripts/profiling-models.sh
 ```
-The above commands might take about one hour. The profiling results from CrypTFlow2 and CrypTen can be obtained by the following steps: (1) Downloading the codes stored in https://github.com/wqruan/EzPC-HawkEye/tree/main and https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
+The above commands might take about one hour. The profiling results CrypTen can be obtained by the following steps: (1) Downloading the codes stored in  https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
 
 After runningthe following script, `Data/modelname-Delphi1.txt` and `Data/modelname-Cheetah1.txt` would contain the profiling results from HawkEye in Table 6, Table 7 and Table 8.
 
@@ -63,7 +63,7 @@ chmod +x Scripts/profiling-models.sh
 Scripts/profiling-models.sh
 python Scripts/profiling-models.py
 ```
-The above commands might take about one hour.  The running time of CrypTFlow2 and CrypTen can be obtained by the following steps: (1) Downloading the codes stored in https://github.com/wqruan/EzPC-HawkEye/tree/main and https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
+The above commands might take about one hour.  The running time of CrypTen can be obtained by the following steps: (1) Downloading the codes stored in https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
 
 
 ## Performance of security model 
