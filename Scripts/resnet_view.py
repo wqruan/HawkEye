@@ -56,7 +56,7 @@ for model in models:
     round_table = np.array(round_table)
     comm_time_table = np.array(comm_time_table)
     cpu_time_table = np.array(cpu_time_table)
-    
+
     for i in range(3):
         print(model + frameworks[i])
         print('comm: {} MB'.format(np.mean(comm_table[:,i])))

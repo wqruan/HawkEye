@@ -121,7 +121,7 @@ Scripts/resnet-opt.sh
 ```
 The command "Scripts/resnet-opt.sh" may take more than one day. You can run 'nohup Scripts/resnet-opt.sh &' rather than 'Scripts/resnet-opt.sh' to run the experiment in the background.
 
-### retrieve results
+### Retrieve results
 
 ```
 python Scripts/resnet_view.py
