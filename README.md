@@ -33,8 +33,8 @@ cd ../
 After running the following script, `Data/modelname-i.txt` would contain the profiling results from HawkEye in Table 1, Table 2, Figure 6, and Figure 7.
 
 ```
-chmod +x Scripts/profiling-models.sh
-./Scripts/profiling-models.sh
+chmod +x Scripts/profiling-models-accuracy.sh
+./Scripts/profiling-models-accuracy.sh
 ```
 The above commands might take about one hour. The profiling results from CrypTen can be obtained by the following steps: (1) Downloading the codes stored in  https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
 
