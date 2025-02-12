@@ -568,7 +568,7 @@ class Program(object):
                 if  'backward' in key:
                     merge_res(backward, value)
                     
-                if 'sgd' in key or 'adam' in key:
+                if 'sgd' in key or 'Adam' in key:
                     merge_res(update, value)
             # print(sum)
             print('Forward')
@@ -612,7 +612,7 @@ class Program(object):
             print_cnn_inference(profiling_res)      
         if self.protocol == 'Cheetah' or self.protocol == 'Delphi' :
             print_cnn_inference(profiling_res, form='MB')      
-        if self.protocol == 'SEMI2K':
+        if self.protocol == 'SEMI2K' or self.protocol == 'ABY3' or self.protocol == 'ABY':
             print_cnn_train(profiling_res)     
         if self.protocol == 'MPCFormer':
             print_transformer_inference(profiling_res) 
