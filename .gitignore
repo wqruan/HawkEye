@@ -1,4 +1,11 @@
 Data/*
 Programs/Bytecode/*
 Programs/Profiling-data/*
+Player-Data/*
 venv/*
+*.so
+*.x
+*.d
+*.o
+local/*
+deps/*

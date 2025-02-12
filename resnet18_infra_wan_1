@@ -1,0 +1,54 @@
+Using security parameter 40
+Trying to run 64-bit computation
+REWINDING - ONLY FOR BENCHMARKING
+Compiler: MPLTS/experiments/resnet18_infra.py -R 64 -Z 3 -b 100000
+Communication details (rounds in parallel threads counted double):
+Passing around 72.9559 MB in 210 rounds, taking 25.48 seconds
+Receiving directly 26.8946 MB in 38 rounds, taking 15.5276 seconds
+Sending directly 0.000304 MB in 19 rounds, taking 0.00148933 seconds
+CPU time = 387.49
+The following benchmarks are excluding preprocessing (offline phase).
+Time = 428.17 seconds 
+Data sent = 72.9562 MB in ~267 rounds (party 0; rounds counted double due to multi-threading)
+Global data sent = 286.104 MB (all parties)
+Actual cost of program:
+  Type int
+       1705984         daBits
+Command line: /home/wqruan/test_resmlp/HawkEye/Scripts/../replicated-ring-party.x 0 resnet18_base.onnx -F -v -pn 13482 -h localhost
+
+Using security parameter 40
+Trying to run 64-bit computation
+REWINDING - ONLY FOR BENCHMARKING
+Compiler: MPLTS/experiments/resnet18_infra.py -R 64 -Z 3 -b 100000
+Communication details (rounds in parallel threads counted double):
+Passing around 62.1179 MB in 192 rounds, taking 21.3249 seconds
+Receiving directly 26.8946 MB in 38 rounds, taking 14.4008 seconds
+Sending directly 0.000304 MB in 19 rounds, taking 0.00145561 seconds
+CPU time = 383.18
+The following benchmarks are excluding preprocessing (offline phase).
+Time = 418.63 seconds 
+Data sent = 62.1182 MB in ~249 rounds (party 0; rounds counted double due to multi-threading)
+Global data sent = 253.59 MB (all parties)
+Actual cost of program:
+  Type int
+       1304576         daBits
+Command line: /home/wqruan/test_resmlp/HawkEye/Scripts/../replicated-ring-party.x 0 resnet18_base_105_taso_inference.onnx -F -v -pn 15795 -h localhost
+
+Using security parameter 40
+Trying to run 64-bit computation
+REWINDING - ONLY FOR BENCHMARKING
+Compiler: MPLTS/experiments/resnet18_infra.py -R 64 -Z 3 -b 100000
+Communication details (rounds in parallel threads counted double):
+Passing around 47.893 MB in 111 rounds, taking 14.5829 seconds
+Receiving directly 26.8946 MB in 38 rounds, taking 13.7779 seconds
+Sending directly 0.000304 MB in 19 rounds, taking 0.00193088 seconds
+CPU time = 381.553
+The following benchmarks are excluding preprocessing (offline phase).
+Time = 409.713 seconds 
+Data sent = 47.8933 MB in ~168 rounds (party 0; rounds counted double due to multi-threading)
+Global data sent = 210.916 MB (all parties)
+Actual cost of program:
+  Type int
+        777728         daBits
+Command line: /home/wqruan/test_resmlp/HawkEye/Scripts/../replicated-ring-party.x 0 resnet18_base_105_hawkeye_inference.onnx -F -v -pn 13283 -h localhost
+

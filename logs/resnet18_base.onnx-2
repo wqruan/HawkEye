@@ -1,8 +1,17 @@
 Using security parameter 40
 Trying to run 64-bit computation
-Client-side handshake with P1 failed. Make sure both sides  have the necessary certificate (Player-Data/P2.pem in the default configuration on their side and Player-Data/P1.pem on ours), and run `c_rehash <directory>` on its location.
-The certificates should be the same on every host. Also make sure that it's still valid. Certificates generated with `Scripts/setup-ssl.sh` expire after a month.
-See also https://mp-spdz.readthedocs.io/en/latest/troubleshooting.html#handshake-failures
-Signature (should match the other side): 8c460416d38195cf0928c002ba83028f/702a0f7c3e13f7f8634ca59439998b95
-terminate called after throwing an instance of 'boost::wrapexcept<boost::system::system_error>'
-  what():  handshake: certificate verify failed
+REWINDING - ONLY FOR BENCHMARKING
+Compiler: MPLTS/experiments/resnet18_infra.py -R 64 -Z 3 -b 100000
+Communication details (rounds in parallel threads counted double):
+Passing around 72.9559 MB in 210 rounds, taking 35.1622 seconds
+Receiving directly 0.000304 MB in 19 rounds, taking 4.43509 seconds
+Sending directly 40.3418 MB in 57 rounds, taking 0.0701901 seconds
+CPU time = 388.836
+The following benchmarks are excluding preprocessing (offline phase).
+Time = 428.181 seconds 
+Data sent = 113.298 MB in ~286 rounds (party 2; rounds counted double due to multi-threading)
+Global data sent = 286.104 MB (all parties)
+Actual cost of program:
+  Type int
+       1705984         daBits
+Command line: /home/wqruan/test_resmlp/HawkEye/Scripts/../replicated-ring-party.x 2 resnet18_base.onnx -F -v -pn 13482 -h localhost

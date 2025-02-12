@@ -1,8 +1,17 @@
 Using security parameter 40
 Trying to run 64-bit computation
-Server-side handshake with P2 failed. Make sure both sides  have the necessary certificate (Player-Data/P0.pem in the default configuration on their side and Player-Data/P2.pem on ours), and run `c_rehash <directory>` on its location.
-The certificates should be the same on every host. Also make sure that it's still valid. Certificates generated with `Scripts/setup-ssl.sh` expire after a month.
-See also https://mp-spdz.readthedocs.io/en/latest/troubleshooting.html#handshake-failures
-Signature (should match the other side): 8c460416d38195cf0928c002ba83028f/e10fe558622dfbda23bbb5fbe41927b7
-terminate called after throwing an instance of 'boost::wrapexcept<boost::system::system_error>'
-  what():  handshake: stream truncated
+REWINDING - ONLY FOR BENCHMARKING
+Compiler: MPLTS/experiments/resnet18_infra.py -R 64 -Z 3 -b 100000
+Communication details (rounds in parallel threads counted double):
+Passing around 62.1179 MB in 192 rounds, taking 21.3249 seconds
+Receiving directly 26.8946 MB in 38 rounds, taking 14.4008 seconds
+Sending directly 0.000304 MB in 19 rounds, taking 0.00145561 seconds
+CPU time = 383.18
+The following benchmarks are excluding preprocessing (offline phase).
+Time = 418.63 seconds 
+Data sent = 62.1182 MB in ~249 rounds (party 0; rounds counted double due to multi-threading)
+Global data sent = 253.59 MB (all parties)
+Actual cost of program:
+  Type int
+       1304576         daBits
+Command line: /home/wqruan/test_resmlp/HawkEye/Scripts/../replicated-ring-party.x 0 resnet18_base_105_taso_inference.onnx -F -v -pn 15795 -h localhost
