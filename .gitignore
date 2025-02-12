@@ -8,4 +8,3 @@ venv/*
 *.d
 *.o
 local/*
-deps/*
