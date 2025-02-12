@@ -36,7 +36,7 @@ After running the following script, `Data/modelname-i.txt` would contain the pro
 chmod +x Scripts/profiling-models-accuracy.sh
 ./Scripts/profiling-models-accuracy.sh
 ```
-The above commands might take about one hour. The profiling results from CrypTen can be obtained by the following steps: (1) Downloading the codes stored in  https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
+The above commands take 20 minutes. The profiling results from CrypTen can be obtained by the following steps: (1) Downloading the codes stored in  https://github.com/wqruan/MPCFormer-HawkEye. (2) Following the instructions in README-HawkEye.md of source codes.
 
 
 ### Table 6, Table 7 and Table 8
