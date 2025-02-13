@@ -113,7 +113,7 @@ Scripts/setup-online.sh 3 64
 ```
 
 ### Run experiments
-After running the following script, you can run '' to parse the running results. After running 'python Scripts/resnet_view.py,' the terminal would show the experimental results in Table 5.
+After running the following script, you can run 'python Scripts/resnet_view.py' to parse the running results. After running 'python Scripts/resnet_view.py,' the terminal would show the experimental results in Table 5.
 ```
 chmod +x Scripts/resnet-opt.sh
 chmod +x Scripts/ring.sh
