@@ -102,7 +102,9 @@ The above commands might take about half an hour.
 
 ### Prepare environment
 ```
-sudo apt-get install automake build-essential cmake git libboost-dev libboost-thread-dev libntl-dev libsodium-dev libssl-dev libtool m4  texinfo yasm
+sudo apt-get install automake build-essential cmake git libboost-dev libboost-thread-dev libntl-dev libsodium-dev libssl-dev libtool m4  texinfo yasm\
+make clean-deps boost libote
+make clean
 make -j 8 tldr
 make -j 8 replicated-ring-party.x
 make -j 8 Fake-Offline.x
