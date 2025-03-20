@@ -61,6 +61,6 @@ for model in models:
         print(model + frameworks[i])
         print('comm: {} MB'.format(np.mean(comm_table[:,i])))
         print('round:', np.mean(round_table[:,i]))
-        print('comm_time: {} ({}) seconds'.format(np.mean(comm_time_table[:,i]), np.var(comm_time_table[:,i])))
+        print('comm_time: {} ({}) seconds'.format(np.mean(comm_time_table[:,i]), np.std(comm_time_table[:,i])))
         print()
 
