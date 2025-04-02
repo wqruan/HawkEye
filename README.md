@@ -4,7 +4,7 @@ This README file provides instructions for reproducing the experimental results 
 
 We thank all anonymous reviewers for their insightful comments, which have significantly contributed to the improvement of this artifact.
 
-System Requirements: Unless specified differently, the evaluations in this README file can be conducted on a machine with 4 cores and 64 GB of RAM.
+System Requirements: Unless specified differently, the evaluations in this README file can be conducted on a Ubuntu 20.04 machine with 4 cores and 64 GB of RAM.
 
 
 ## Package structure
